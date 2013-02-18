@@ -18,6 +18,7 @@ package org.modelmapper.internal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.modelmapper.Converter;
@@ -60,9 +61,18 @@ public final class TypeMapStore {
    * Returns a TypeMap for the {@code sourceType} and {@code destinationType}, else null if none
    * exists.
    */
-  @SuppressWarnings("unchecked")
   public <S, D> TypeMap<S, D> get(Class<S> sourceType, Class<D> destinationType) {
-    return (TypeMap<S, D>) typeMaps.get(TypePair.of(sourceType, destinationType));
+    return find(sourceType, destinationType);
+  }
+  
+  @SuppressWarnings("unchecked")
+  private <S, D> TypeMap<S, D> find(Class<S> sourceType, Class<D> destinationType) {
+    // TODO "best" match instead of first
+    for (Entry<TypePair<?, ?>, TypeMap<?, ?>> tm : typeMaps.entrySet()) {
+      if (tm.getKey().getSourceType().isAssignableFrom(sourceType) && tm.getKey().getDestinationType().isAssignableFrom(destinationType))
+        return (TypeMap<S, D>) tm.getValue();
+    }
+    return null;
   }
 
   /**
@@ -81,11 +91,9 @@ public final class TypeMapStore {
    * @param propertyMap to add mappings for (nullable)
    * @param converter to set (nullable)
    */
-  @SuppressWarnings("unchecked")
   public <S, D> TypeMap<S, D> getOrCreate(Class<S> sourceType, Class<D> destinationType,
       PropertyMap<S, D> propertyMap, Converter<S, D> converter, MappingEngineImpl engine) {
-    TypePair<S, D> typePair = TypePair.of(sourceType, destinationType);
-    TypeMapImpl<S, D> typeMap = (TypeMapImpl<S, D>) typeMaps.get(typePair);
+    TypeMapImpl<S, D> typeMap = (TypeMapImpl<S, D>) find(sourceType, destinationType);
 
     if (typeMap == null) {
       typeMap = new TypeMapImpl<S, D>(sourceType, destinationType, config, engine);
@@ -95,7 +103,7 @@ public final class TypeMapStore {
         new PropertyMappingBuilder<S, D>(typeMap, config.typeMapStore, config.converterStore)
             .build();
 
-      typeMaps.put(typePair, typeMap);
+      typeMaps.put(TypePair.of(sourceType, destinationType), typeMap);
     } else if (propertyMap != null)
       typeMap.addMappings(propertyMap);
 
