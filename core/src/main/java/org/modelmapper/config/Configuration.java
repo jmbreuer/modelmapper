@@ -15,6 +15,7 @@
  */
 package org.modelmapper.config;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import org.modelmapper.Provider;
@@ -163,6 +164,12 @@ public interface Configuration {
    * @see #enableFieldMatching(boolean)
    */
   boolean isFieldMatchingEnabled();
+  
+  /**
+   * Returns whether modelmapper shouldn't try to (default-)instantiate the given type,
+   * but rather always (try to) use the configured Converter
+   */
+  boolean isInstantiationInhibited(Type type);
 
   /**
    * Sets the tokenizer to be applied to destination property and class names during the matching
@@ -245,4 +252,13 @@ public interface Configuration {
    * @throws IllegalArgumentException if {@code namingConvention} is null
    */
   Configuration setSourceNamingConvention(NamingConvention namingConvention);
+  
+  /**
+   * Add a type to the list of "types not to be instantiated by modelmapper".
+   * Instead, modelmapper will try to use a Converter to create the target instance, 
+   * or even try to directly use the source value.
+   * 
+   * @param type The type to be instantiation-inhibited
+   */
+  Configuration addInstantiationInhibited(Type type);
 }

@@ -120,7 +120,8 @@ public class MappingEngineImpl implements MappingEngine {
    */
   <S, D> D typeMap(MappingContextImpl<S, D> context, TypeMap<S, D> typeMap) {
     context.setTypeMap(typeMap);
-    if (context.getDestination() == null && Types.isInstantiable(context.getDestinationType())) {
+    if (context.getDestination() == null && Types.isInstantiable(context.getDestinationType())
+        && !configuration.isInstantiationInhibited(context.getDestinationType())) {
       D destination = createDestination(context);
       if (destination == null)
         return null;

@@ -15,7 +15,12 @@
  */
 package org.modelmapper.internal;
 
+import java.lang.reflect.Type;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.modelmapper.Provider;
 import org.modelmapper.config.Configuration;
@@ -52,6 +57,7 @@ public class InheritingConfiguration implements Configuration {
   private NamingConvention sourceNamingConvention;
   Boolean enableFieldMatching;
   Boolean ignoreAmbiguity;
+  private Set<Type> instantiationInhibited;
 
   /**
    * Creates an initial InheritingConfiguration.
@@ -71,6 +77,7 @@ public class InheritingConfiguration implements Configuration {
     methodAccessLevel = AccessLevel.PUBLIC;
     enableFieldMatching = Boolean.FALSE;
     ignoreAmbiguity = Boolean.FALSE;
+    instantiationInhibited = new HashSet<Type>();
   }
 
   /**
@@ -80,6 +87,7 @@ public class InheritingConfiguration implements Configuration {
     // Stores are not inheritable
     typeMapStore = source.typeMapStore;
     converterStore = source.converterStore;
+    instantiationInhibited = source.instantiationInhibited;
 
     if (inherit) {
       this.parent = source;
@@ -210,6 +218,10 @@ public class InheritingConfiguration implements Configuration {
     return enableFieldMatching == null ? parent.isFieldMatchingEnabled() : enableFieldMatching;
   }
 
+  public boolean isInstantiationInhibited(Type type) {
+      return instantiationInhibited.contains(type);
+  }
+  
   public Configuration setDestinationNameTokenizer(NameTokenizer nameTokenizer) {
     destinationNameTokenizer = Assert.notNull(nameTokenizer);
     return this;
@@ -258,5 +270,10 @@ public class InheritingConfiguration implements Configuration {
   public Configuration setSourceNamingConvention(NamingConvention namingConvention) {
     sourceNamingConvention = Assert.notNull(namingConvention);
     return this;
+  }
+  
+  public Configuration addInstantiationInhibited(Type type) {
+      instantiationInhibited.add(type);
+      return this;
   }
 }
