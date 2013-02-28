@@ -30,6 +30,7 @@ import org.modelmapper.config.Configuration;
 import org.modelmapper.internal.converter.ConverterStore;
 import org.modelmapper.internal.util.Iterables;
 import org.modelmapper.internal.util.Primitives;
+import org.modelmapper.internal.util.TypeResolver.Unknown;
 import org.modelmapper.internal.util.Types;
 import org.modelmapper.spi.ConstantMapping;
 import org.modelmapper.spi.Mapping;
@@ -235,6 +236,8 @@ public class MappingEngineImpl implements MappingEngine {
           }
 
           destinationValue = convert(propertyContext, converter);
+        } else if (Unknown.class.isAssignableFrom(propertyContext.getDestinationType())) {
+          destinationValue = propertyContext.getSource();
         } else if (propertyContext.getSource() != null)
           destinationValue = map(propertyContext);
 
