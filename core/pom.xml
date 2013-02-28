@@ -10,6 +10,7 @@
 
   <artifactId>modelmapper</artifactId>
   <name>ModelMapper</name>
+  <version>0.5.6.001-jmbreuer</version>
 
   <dependencies>
     <dependency>
