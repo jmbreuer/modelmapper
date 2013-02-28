@@ -267,15 +267,13 @@ public class MappingEngineImpl implements MappingEngine {
           }
 
           if (intermediateDest == null) {
-            // Obtain from accessor on provided destination
-            if (context.providedDestination) {
-              Accessor accessor = TypeInfoRegistry.typeInfoFor(destination.getClass(),
-                  configuration)
-                  .getAccessors()
-                  .get(mutator.getName());
-              if (accessor != null)
-                intermediateDest = accessor.getValue(destination);
-            }
+            // Try to use what's already there
+            Accessor accessor = TypeInfoRegistry.typeInfoFor(destination.getClass(),
+                configuration)
+                .getAccessors()
+                .get(mutator.getName());
+            if (accessor != null)
+              intermediateDest = accessor.getValue(destination);
 
             // Obtain from new instance
             if (intermediateDest == null) {
