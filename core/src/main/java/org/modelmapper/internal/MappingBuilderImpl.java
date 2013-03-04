@@ -18,8 +18,8 @@ package org.modelmapper.internal;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.modelmapper.Condition;
 import org.modelmapper.ConfigurationException;
@@ -46,7 +46,7 @@ public class MappingBuilderImpl<S, D> implements ConditionExpression<S, D> {
   volatile S source;
   private volatile D destination;
   final Errors errors = new Errors();
-  private final Set<MappingImpl> propertyMappings = new HashSet<MappingImpl>();
+  private final List<MappingImpl> propertyMappings = new LinkedList<MappingImpl>();
   private final SourceProgress sourceProgress;
   private final DestinationProgress destinationProgress;
   private MappingOptions options = new MappingOptions();

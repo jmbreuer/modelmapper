@@ -16,10 +16,9 @@
 package org.modelmapper.internal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.modelmapper.Condition;
 import org.modelmapper.Converter;
@@ -43,9 +42,9 @@ class TypeMapImpl<S, D> implements TypeMap<S, D> {
   final Configuration configuration;
   private final MappingEngineImpl engine;
   /** Guarded by "mappings" */
-  private final Map<String, PropertyInfo> mappedProperties = new HashMap<String, PropertyInfo>();
+  private final Map<String, PropertyInfo> mappedProperties = new LinkedHashMap<String, PropertyInfo>();
   /** Guarded by "mappings" */
-  private final Map<String, MappingImpl> mappings = new TreeMap<String, MappingImpl>();
+  private final Map<String, MappingImpl> mappings = new LinkedHashMap<String, MappingImpl>();
   private Converter<S, D> converter;
   private Condition<?, ?> condition;
   private Provider<D> provider;
