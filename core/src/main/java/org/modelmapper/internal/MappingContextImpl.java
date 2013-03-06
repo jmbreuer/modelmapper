@@ -209,7 +209,8 @@ public class MappingContextImpl<S, D> implements MappingContext<S, D>, Provision
 
   void setDestination(D destination) {
     this.destination = destination;
-    sourceToDestination.put(source, destination);
+    if (((MappingEngineImpl)mappingEngine).getConfiguration().isResolveCircular())
+        sourceToDestination.put(source, destination);
   }
 
   void setParentSource(Object parentSource) {

@@ -409,4 +409,8 @@ public class MappingEngineImpl implements MappingEngine {
     contextImpl.setDestination(destination);
     return destination;
   }
+  
+  Configuration getConfiguration() {
+      return configuration;
+  }
 }

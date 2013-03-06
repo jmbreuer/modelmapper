@@ -172,6 +172,13 @@ public interface Configuration {
   boolean isInstantiationInhibited(Type type);
 
   /**
+   * Returns whether modelmapper should try to resolve circular references,
+   * at the expense of breaking mappings with multiple different (converted) targets
+   * for the same source value
+   */
+  boolean isResolveCircular();
+  
+  /**
    * Sets the tokenizer to be applied to destination property and class names during the matching
    * process.
    * 
@@ -261,4 +268,14 @@ public interface Configuration {
    * @param type The type to be instantiation-inhibited
    */
   Configuration addInstantiationInhibited(Type type);
+
+  /**
+   * Sets whether modelmapper should try to resolve circular references,
+   * at the expense of breaking mappings with multiple different (converted) targets
+   * for the same source value.
+   * 
+   * Default is 'true'.
+   */
+  Configuration setResolveCircular(boolean resolveCircular);
+
 }

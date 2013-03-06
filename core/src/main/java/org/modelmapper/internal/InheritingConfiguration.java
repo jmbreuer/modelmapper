@@ -58,6 +58,7 @@ public class InheritingConfiguration implements Configuration {
   Boolean enableFieldMatching;
   Boolean ignoreAmbiguity;
   private Set<Type> instantiationInhibited;
+  private Boolean resolveCircular; 
 
   /**
    * Creates an initial InheritingConfiguration.
@@ -78,6 +79,7 @@ public class InheritingConfiguration implements Configuration {
     enableFieldMatching = Boolean.FALSE;
     ignoreAmbiguity = Boolean.FALSE;
     instantiationInhibited = new HashSet<Type>();
+    resolveCircular = Boolean.TRUE;
   }
 
   /**
@@ -104,6 +106,7 @@ public class InheritingConfiguration implements Configuration {
       methodAccessLevel = source.methodAccessLevel;
       enableFieldMatching = source.enableFieldMatching;
       ignoreAmbiguity = source.ignoreAmbiguity;
+      resolveCircular = source.resolveCircular;
     }
   }
 
@@ -222,6 +225,10 @@ public class InheritingConfiguration implements Configuration {
       return instantiationInhibited.contains(type);
   }
   
+  public boolean isResolveCircular() {
+    return resolveCircular;
+  }
+  
   public Configuration setDestinationNameTokenizer(NameTokenizer nameTokenizer) {
     destinationNameTokenizer = Assert.notNull(nameTokenizer);
     return this;
@@ -273,7 +280,12 @@ public class InheritingConfiguration implements Configuration {
   }
   
   public Configuration addInstantiationInhibited(Type type) {
-      instantiationInhibited.add(type);
-      return this;
+    instantiationInhibited.add(type);
+    return this;
+  }
+  
+  public Configuration setResolveCircular(boolean resolveCircular) {
+    this.resolveCircular = resolveCircular;
+    return this;
   }
 }
